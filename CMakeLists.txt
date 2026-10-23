@@ -10,11 +10,12 @@ add_executable(client main.cpp)
 target_link_libraries(client PRIVATE ws2_32)
 
 # 如果使用 MSVC，禁用 SDL 检查以避免一些安全函数警告（可选）
-if(MSVC)
-    target_compile_options(winsock_client PRIVATE /W3 /EHsc)
-    target_compile_options(winsock_client PRIVATE
-            $<$<CONFIG:Debug>:/MTd>
-            $<$<NOT:$<CONFIG:Debug>>:/MT>)
-    set_target_properties(winsock_client PROPERTIES
-            MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+
+if(MINGW)
+  target_link_options(client PRIVATE
+    -static-libgcc
+    -static-libstdc++
+    -static
+  )
 endif()
